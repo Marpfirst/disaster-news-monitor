@@ -33,7 +33,7 @@ def show_dashboard(db):
     with col2:
         st.markdown(f"""
         <div class="stat-card">
-            <div class="stat-value" style="color: #ff9800;">{stats['unverified']}</div>
+            <div class="stat-value" style="color: #d6b924;">{stats['unverified']}</div>
             <div class="stat-label">Belum Diverifikasi</div>
         </div>
         """, unsafe_allow_html=True)
@@ -41,7 +41,7 @@ def show_dashboard(db):
     with col3:
         st.markdown(f"""
         <div class="stat-card">
-            <div class="stat-value" style="color: #4caf50;">{stats['verified_true']}</div>
+            <div class="stat-value" style="color: #26de3b;">{stats['verified_true']}</div>
             <div class="stat-label">Verified Bencana</div>
         </div>
         """, unsafe_allow_html=True)
@@ -49,7 +49,7 @@ def show_dashboard(db):
     with col4:
         st.markdown(f"""
         <div class="stat-card">
-            <div class="stat-value" style="color: #f44336;">{stats['verified_false']}</div>
+            <div class="stat-value" style="color: #f43636;">{stats['verified_false']}</div>
             <div class="stat-label">Verified Bukan</div>
         </div>
         """, unsafe_allow_html=True)
@@ -130,11 +130,11 @@ def show_dashboard(db):
         colors = [''] * len(row)
         
         if status == 'UNVERIFIED':
-            colors[-1] = 'background-color: #fff3cd'
+            colors[-1] = 'background-color: #ffcd2e'
         elif status == 'VERIFIED_TRUE':
-            colors[-1] = 'background-color: #d4edda'
+            colors[-1] = 'background-color: #1bfa51'
         elif status == 'VERIFIED_FALSE':
-            colors[-1] = 'background-color: #f8d7da'
+            colors[-1] = 'background-color: #ff2e41'
         
         return colors
     
