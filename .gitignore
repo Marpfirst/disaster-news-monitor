@@ -1,0 +1,19 @@
+# Data
+data/backup/*
+data/*.db
+
+# Logs
+logs/*.log
+logs/skipped_articles/*
+
+# Environment
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,14 @@
+{
+  "last_scrape_time": "2025-11-27T02:37:33.303996+00:00",
+  "time_window": "1d",
+  "statistics": {
+    "articles_fetched": 1707,
+    "articles_after_location_filter": 955,
+    "articles_after_disaster_filter": 666,
+    "articles_after_dedup": 511,
+    "articles_with_invalid_dates": 0,
+    "keywords_scraped": 31,
+    "keywords_failed": 0
+  },
+  "status": "SUCCESS"
+}
