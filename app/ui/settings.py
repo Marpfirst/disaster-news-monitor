@@ -117,59 +117,63 @@ def show_export_section(db):
     
     st.subheader("📥 Export Data")
     
-    with st.form("export_form"):
-        col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        export_filter = st.selectbox(
+            "Filter Data",
+            [
+                "Semua Artikel",
+                "Hanya Verified (Bencana)",
+                "Hanya Verified (Bukan)",
+                "Hanya Unverified"
+            ]
+        )
+    
+    with col2:
+        filename = st.text_input(
+            "Nama File",
+            value=f"export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+        )
+    
+    # Tombol biasa, bukan form
+    if st.button("💾 Export ke Excel", type="primary"):
+        # Map filter selection to status
+        filter_map = {
+            "Semua Artikel": None,
+            "Hanya Verified (Bencana)": "VERIFIED_TRUE",
+            "Hanya Verified (Bukan)": "VERIFIED_FALSE",
+            "Hanya Unverified": "UNVERIFIED"
+        }
         
-        with col1:
-            export_filter = st.selectbox(
-                "Filter Data",
-                [
-                    "Semua Artikel",
-                    "Hanya Verified (Bencana)",
-                    "Hanya Verified (Bukan)",
-                    "Hanya Unverified"
-                ]
-            )
+        filter_status = filter_map[export_filter]
         
-        with col2:
-            filename = st.text_input(
-                "Nama File",
-                value=f"export_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
-            )
+        # Buat folder export kalau belum ada
+        export_dir = "data/exports"
+        os.makedirs(export_dir, exist_ok=True)
+        export_path = os.path.join(export_dir, filename)
         
-        submit = st.form_submit_button("💾 Export ke Excel", type="primary", width='stretch')
+        success = db.export_to_excel(export_path, filter_status)
         
-        if submit:
-            # Map filter selection to status
-            filter_map = {
-                "Semua Artikel": None,
-                "Hanya Verified (Bencana)": "VERIFIED_TRUE",
-                "Hanya Verified (Bukan)": "VERIFIED_FALSE",
-                "Hanya Unverified": "UNVERIFIED"
-            }
+        if success:
+            st.success("✅ Export berhasil!")
             
-            filter_status = filter_map[export_filter]
-            
-            # Create temp export path
-            export_path = f"data/exports/{filename}"
-            os.makedirs("data/exports", exist_ok=True)
-            
-            success = db.export_to_excel(export_path, filter_status)
-            
-            if success:
-                st.success(f"✅ Export berhasil!")
-                
-                # Provide download button
+            # Baca file dan jadikan bytes untuk download_button
+            try:
                 with open(export_path, "rb") as f:
-                    st.download_button(
-                        label="📥 Download File",
-                        data=f,
-                        file_name=filename,
-                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        width='stretch'
-                    )
-            else:
-                st.error("❌ Export gagal. Pastikan ada data untuk di-export.")
+                    file_bytes = f.read()
+                
+                st.download_button(
+                    label="📥 Download File",
+                    data=file_bytes,
+                    file_name=filename,
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key=f"download_{filename}",  # key unik
+                )
+            except Exception as e:
+                st.error(f"❌ Gagal menyiapkan file untuk di-download: {e}")
+        else:
+            st.error("❌ Export gagal. Pastikan ada data untuk di-export.")
 
 
 def show_delete_section(db):
